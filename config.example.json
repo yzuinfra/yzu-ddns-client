@@ -1,0 +1,15 @@
+{
+    "provider": "bunny", // only "bunny" is supported currently
+    "apikey": "your_api_key_here",
+    "zones": [ // List of zones to manage
+        {
+            "name": "example.com",
+            "records": [
+                {
+                    "type": "A",
+                    "name": "www" // for example this renders to www.example.com
+                }
+            ]
+        }
+    ]
+}

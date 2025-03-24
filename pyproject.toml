@@ -1,0 +1,12 @@
+[project]
+name = "yzu_ddns_client"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "colorlog>=6.9.0",
+    "jsonpickle>=4.0.2",
+    "pyjson5>=1.6.8",
+    "requests>=2.32.3",
+]
