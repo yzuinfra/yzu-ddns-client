@@ -17,6 +17,7 @@ class Config:
                 "name": zone.get('name'),
                 "records": [
                     Record(
+                        zone_id=zone.get('id', "use_remote"),
                         record_id=record.get('id', "use_remote"),
                         record_name=record.get('name'),
                         record_type=record.get('type', "use_remote"),

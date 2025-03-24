@@ -1,5 +1,6 @@
 class Record:
-    def __init__(self, record_id: str = "", record_name: str = "", record_type: str = "A", record_content: str = None, record_ttl: int = 3600):
+    def __init__(self, zone_id: str = "", record_id: str = "", record_name: str = "", record_type: str = "A", record_content: str = None, record_ttl: int = 3600):
+        self.zone_id = zone_id
         self.record_id = record_id
         self.record_name = record_name
         self.record_type = record_type

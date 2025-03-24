@@ -42,6 +42,7 @@ class BunnyProvider(BaseProvider):
             "id": zone.get('Id'),
             "name": zone.get('Domain'),
             "records": [Record(
+                zone_id=zone.get('Id'),
                 record_id=record.get('Id'),
                 record_name=record.get('Name'),
                 record_type=bunny_type_to_str(record.get('Type')),
@@ -49,3 +50,18 @@ class BunnyProvider(BaseProvider):
                 record_ttl=record.get('Ttl')
             ) for record in zone.get('Records', [])]
         } for zone in response.json()["Items"]])
+    
+    def updateRecord(self, zone_id, record_id, fields={}):
+        headers = {
+            'AccessKey': self.api_key,
+            'Content-Type': 'application/json'
+        }
+        response = requests.post(f"{BASE_URL}/dnszone/{zone_id}/records/{record_id}", json=fields, headers=headers, timeout=10)
+        
+        if not response.status_code == 204:
+            return "Failed to update record", response.status_code
+        
+        return "Record updated successfully", 204
+    
+    def successCodes(self):
+        return [204]
