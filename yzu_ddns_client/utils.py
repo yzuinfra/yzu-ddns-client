@@ -44,9 +44,7 @@ def watch(config):
                         logger.info(f"Updating root record in zone {zone.name} from {record.record_content} to {current_ip}")
                     else:
                         logger.info(f"Updating record {record.record_name} in zone {zone.name} from {record.record_content} to {current_ip}")
-                    ret, code = ProviderManager.get_provider().updateRecord(zone.id, record.record_id, {
-                        "Value": current_ip, # TODO, abstract this, other providers wont have "Value"
-                    })
+                    ret, code = ProviderManager.get_provider().updateRecord(zone.id, record.record_id, {"content": current_ip})
                     if code not in ProviderManager.get_provider().successCodes():
                         logger.error(f"Failed to update record {record.record_name} in zone {zone.name}. Error code: {code}, response: {ret}")
                     else:

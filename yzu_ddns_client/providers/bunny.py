@@ -1,5 +1,5 @@
 import requests
-from yzu_ddns_client.models.provider import BaseProvider
+from yzu_ddns_client.models.provider import BaseProvider, UpdateRecordRequest
 from yzu_ddns_client.models.zones import Zones
 from yzu_ddns_client.models.record import Record
 
@@ -22,6 +22,16 @@ def bunny_type_to_str(bunny_type: int) -> str:
         12: "NS"
     }
     return type_mapping.get(bunny_type, "Unknown")
+
+def bunny_request_to_fields(request: UpdateRecordRequest) -> dict:
+    fields = {}
+    if request.get('content'):
+        fields['Value'] = request['content']
+    if request.get('ttl'):
+        fields['Ttl'] = request['ttl']
+    if request.get('type'):
+        fields['Type'] = request['type']
+    return fields
 
 class BunnyProvider(BaseProvider):
     def __init__(self, config):
@@ -51,17 +61,17 @@ class BunnyProvider(BaseProvider):
             ) for record in zone.get('Records', [])]
         } for zone in response.json()["Items"]])
     
-    def updateRecord(self, zone_id, record_id, fields={}):
+    def updateRecord(self, zone_id, record_id, request: UpdateRecordRequest):
         headers = {
             'AccessKey': self.api_key,
             'Content-Type': 'application/json'
         }
-        response = requests.post(f"{BASE_URL}/dnszone/{zone_id}/records/{record_id}", json=fields, headers=headers, timeout=10)
-        
+        response = requests.post(f"{BASE_URL}/dnszone/{zone_id}/records/{record_id}", json=bunny_request_to_fields(request), headers=headers, timeout=10)
+
         if not response.status_code == 204:
             return "Failed to update record", response.status_code
         
         return "Record updated successfully", 204
-    
+
     def successCodes(self):
         return [204]
