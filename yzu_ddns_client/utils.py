@@ -33,6 +33,7 @@ def watch(config):
                 record for record in zone.records 
                 if record.record_name in [
                     r.record_name for z in updatable_zones for r in z.records if r.record_name == record.record_name and r.record_type == record.record_type
+                    and (r.record_id == record.record_id if r.record_id != "use_remote" else True)
                 ]
             ]
             if not matching_records:
